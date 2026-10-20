@@ -1,0 +1,47 @@
+rules_version = '2';
+
+service cloud.firestore {
+  match /databases/{database}/documents {
+    // Helper functions
+    function isAuthenticated() {
+      return request.auth != null;
+    }
+
+    function isOwner(userId) {
+      return isAuthenticated() && request.auth.uid == userId;
+    }
+
+    // Users Collection
+    match /users/{userId} {
+      allow read: if isAuthenticated();
+      allow write: if isOwner(userId) || (isAuthenticated() && request.auth.token.role == 'admin');
+    }
+
+    // Courses, Lessons, and Quizzes
+    match /courses/{courseId} {
+      allow read: if true;
+      allow write: if isAuthenticated() && (request.auth.token.role == 'admin' || request.auth.token.role == 'instructor');
+
+      match /lessons/{lessonId} {
+        allow read: if true;
+        allow write: if isAuthenticated() && (request.auth.token.role == 'admin' || request.auth.token.role == 'instructor');
+
+        match /quizzes/{quizId} {
+          allow read: if true;
+          allow write: if isAuthenticated() && (request.auth.token.role == 'admin' || request.auth.token.role == 'instructor');
+        }
+      }
+    }
+
+    // Submissions
+    match /submissions/{submissionId} {
+      allow create: if isAuthenticated();
+      allow read, update: if isAuthenticated() && (
+        resource.data.studentId == request.auth.uid ||
+        request.auth.token.role == 'instructor' ||
+        request.auth.token.role == 'admin'
+      );
+      allow delete: if isAuthenticated() && request.auth.token.role == 'admin';
+    }
+  }
+}

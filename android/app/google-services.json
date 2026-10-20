@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "240669746102",
+    "project_id": "go-learn-2c0c7",
+    "storage_bucket": "go-learn-2c0c7.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:240669746102:android:ec1e4f747def498d871717",
+        "android_client_info": {
+          "package_name": "com.example.golearn"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCcFuMr-Mw8r91kxXwKJ6Amg78shycITlI"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
